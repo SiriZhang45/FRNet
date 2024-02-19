@@ -14,7 +14,7 @@ model_id_name=weather
 data_name=custom
 
 random_seed=2021
-for pred_len in 96
+for pred_len in 96 192 336 720
 do
     python -u run_longExp.py \
       --random_seed $random_seed \
@@ -39,15 +39,15 @@ do
       --stride 8\
       --des 'Exp' \
       --train_epochs 100\
-      --patience 20\
+      --patience 10\
       --kernel_size 25\
-      --lradj type4\
+      --lradj type3\
       --pred_head_type 'linear'\
       --aggregation_type 'linear'\
       --channel_attention 0\
       --global_freq_pred 0\
       --period_list 144 72\
       --emb 164\
-      --decomposition 1\
-      --itr 1 --batch_size 16 --learning_rate 0.0003 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log 
+      --decomposition 0\
+      --itr 1 --batch_size 32 --learning_rate 0.0003 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log 
 done
