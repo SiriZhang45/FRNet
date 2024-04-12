@@ -16,9 +16,9 @@ We've compared FRNet with PatchTST in Table 1. Since Contiformer specializes in 
 
 ## Cons5 & Cons6:
 To validate that FRNet's superiority stems from its PFR module, we compare FRNet with three variants. 
-### V1: Predicting periodic components in the time domain without using FFT
-### V2: Static frequency-domain prediction, like a frequency-domain Linear 
-### V3: Ignoring both period dynamics and frequency-domain prediction. Results are below:
+#### V1: Predicting periodic components in the time domain without using FFT
+#### V2: Static frequency-domain prediction, like a frequency-domain Linear 
+#### V3: Ignoring both period dynamics and frequency-domain prediction. Results are below:
 
 |  | length | FRNet | V1 | V2 | V3 |
 | --- | --- | --- | --- | --- | --- |
@@ -33,4 +33,19 @@ To validate that FRNet's superiority stems from its PFR module, we compare FRNet
 
 It can be seen that removing the dynamic representation of the period in the frequency domain or not reshaping the time series for dynamic prediction will significantly reduce prediction performance.
 
+## Q5:
+Top-K amplitude periods selection is widely used and proven effective[1] [2] [3]. Higher amplitudes signify stronger periodic effects and form the time series' backbone. It neglects low-amplitude noise. Top-amplitude period selection is backed by energy concentration and maximum entropy concepts [4].
+
+While there are some similarities between our method and existing techniques like FEDformer, such as operating in the frequency domain and subsequently projecting back into the time domain, several distinctive features set our approach apart:
+
+(1). Component Selection Strategy: Unlike FEDformer, which selects a random subset of Fourier bases from the input sequence and encodes them jointly in a single branch, our method identifies and learns from the Q most salient periods across the entire dataset, each treated as a separate branch. This targeted selection process enhances the model's focus on the truly dominant periodic elements.
+
+(2). Decomposition and Prediction Approach: FEDformer employs an incremental decomposition strategy, which has been shown to be suboptimal [5]. In contrast, our method opts for a more direct and efficient two-step process: first, decomposing the data into its constituent periodic components, followed by independent prediction for each component. This streamlined procedure allows for a more precise and focused treatment of individual periodic patterns.
+
+(3). Architectural Design: FEDformer's core architecture relies on pointwise attention mechanisms, which have been demonstrated to hinder the performance of transformers. In contrast, our model adopts a complex-valued Mixer architecture. Not only is this design more effective in capturing the intricate relationships within time series data, but it also boasts a lighter computational footprint, contributing to the overall efficiency and scalability of our method.
+[1] ICLR 2023, TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis
+[2] Periodicity Detection in Time Series Data: A Comprehensive Review. Journal of Systems Engineering and Electronics, 2019.
+[3] ICLR 2024, Periodicity Decoupling Framework for Long-term Series Forecasting
+[4] Principles of Digital Signal Processing: Theory, Algorithms, and Hardware Design. Oxford University Press, 2015.
+[5] First De-Trend then Attend: Rethinking Attention for Time-Series Forecasting
 
